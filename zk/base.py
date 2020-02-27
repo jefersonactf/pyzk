@@ -1616,3 +1616,19 @@ class ZK(object):
             return True
         else:
             raise ZKErrorResponse("Can't clear response")
+
+    def door_status(self):
+        """
+        Get door status
+        0: close
+        1: open
+        
+        :return: int
+        """
+        command = const.CMD_DOORSTATE_RRQ
+        cmd_response = self.__send_command(command=command, response_size=16)
+        if cmd_response.get('status'):
+            data = int(self.__data_recv[8:].hex())
+            return data
+        else:
+            raise ZKErrorResponse("Can't get door stats")
